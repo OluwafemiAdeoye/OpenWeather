@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "4d419759-e1e3-45cc-874a-61568b53fc7f",
+		"name": "Open Weather Map",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19626628"
+	},
+	"item": [
+		{
+			"name": "Check Weather Forecast",
+			"item": [
+				{
+					"name": "Check Weather Forecast",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the API response",
+									"const apiResponse = pm.response.json();",
+									"",
+									"// Save the response in a collection variable named \"weatherApiResponse\"",
+									"pm.collectionVariables.set(\"weatherApiResponse\", JSON.stringify(apiResponse));",
+									"",
+									"// Log the saved response for verification",
+									"console.log(\"Saved Weather API Response:\", pm.collectionVariables.get(\"weatherApiResponse\"));",
+									"",
+									"// Retrieve the saved API response from the collection variable",
+									"const savedApiResponse = JSON.parse(pm.collectionVariables.get(\"weatherApiResponse\"));",
+									"",
+									"// Check if the current weather condition is \"Sunny\"",
+									"const isSunny = savedApiResponse.current && savedApiResponse.current.weather && savedApiResponse.current.weather.some(weather => weather.main === \"Clear\");",
+									"",
+									"// Log the weather condition for verification",
+									"console.log(\"Current Weather Condition:\", isSunny ? \"Sunny\" : \"Not Sunny\");",
+									"",
+									"// Assert that the weather is sunny",
+									"pm.test(\"Weather is Sunny\", () => {",
+									"    pm.expect(isSunny).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{API Key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "appid",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openweathermap.org/data/3.0/onecall?lat={{$randomLatitude}}&lon={{$randomLongitude}}&appid={{API Key}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openweathermap",
+								"org"
+							],
+							"path": [
+								"data",
+								"3.0",
+								"onecall"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "{{$randomLatitude}}"
+								},
+								{
+									"key": "lon",
+									"value": "{{$randomLongitude}}"
+								},
+								{
+									"key": "exclude",
+									"value": "{part}",
+									"disabled": true
+								},
+								{
+									"key": "appid",
+									"value": "{{API Key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "appid",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{API Key}}",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API Key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "weatherApiResponse",
+			"value": ""
+		}
+	]
+}
